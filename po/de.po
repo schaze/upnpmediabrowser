@@ -1,0 +1,31 @@
+# German translations for UPNPMediaBrowser package.
+# Copyright (C) 2013 THE UPNPMediaBrowser'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the UPNPMediaBrowser package.
+#  <schaze@neptune.homenet>, 2013.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: UPNPMediaBrowser 0.1\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2013-11-15 23:21+0100\n"
+"PO-Revision-Date: 2013-11-15 23:04+0100\n"
+"Last-Translator:  <schaze@neptune.homenet>\n"
+"Language-Team: German\n"
+"Language: de\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=ASCII\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: ../src/application.vala:64
+msgid "UPNPMediaBrowser"
+msgstr "UPNPMediaBrowser"
+
+#. "urn:schemas-upnp-org:service:ContentDirectory:1");
+#. cp.device_proxy_unavailable.connect (on_service_proxy_unavailable);
+#: ../src/devices_treeview.vala:23
+msgid "controlpoint is active"
+msgstr "Controlpoint ist aktiv"
+
+#~ msgid "Rescan button clicked"
+#~ msgstr "Rescan Knopf gedrueckt"

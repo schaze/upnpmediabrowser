@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gresources>
+    <gresource prefix="/schaze/upnpmediabrowser">
+        <file compressed="true" preprocess="xml-stripblanks">ui/window.ui</file>
+        <file compressed="true" preprocess="xml-stripblanks">ui/toolbar_box.ui</file> 
+        <file compressed="true" preprocess="xml-stripblanks">ui/devicestreeview.ui</file>
+        <file compressed="true" preprocess="xml-stripblanks">ui/browsetreeview.ui</file>
+        <file compressed="true" preprocess="xml-stripblanks">ui/settings.ui</file>
+    </gresource>
+</gresources>
+<!--
+
+dnl ####
+dnl # $(AM_V_GEN) $(GLIB_COMPILE_RESOURCES) 
+dnl # glib-compile-resources --generate-source --sourcedir $(top_srcdir)/data/ --target "$@" "$<"
+dnl # $(shell $(GLIB_COMPILE_RESOURCES) --generate-dependencies --sourcedir=$(top_dir)/data $(top_srcdir)/data/upnpmediabrowser.gresource.xml)
+dnl ####
+-->

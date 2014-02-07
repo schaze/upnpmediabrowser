@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schemalist>
+    <schema path="/org/schaze/upnpmediabrowser/general/" id="org.schaze.upnpmediabrowser.general">
+    <key name="use-default-mediaplayer" type="b">
+      <default>true</default>
+      <summary>Use the systems default media player to play streams.</summary>
+      <description></description>
+    </key>
+    <key name="mediaplayer-name" type="s">
+      <default>""</default>
+      <summary>Mediaplayer to play streams.</summary>
+      <description></description>
+    </key>
+    <key name="mediaplayer-commandline" type="s">
+      <default>""</default>
+      <summary>Mediaplayer to play streams.</summary>
+      <description></description>
+    </key>
+    <key name="use-custom-mediaplayer" type="b">
+      <default>false</default>
+      <summary>Use a custom media player to play streams.</summary>
+      <description></description>
+    </key>
+    <key name="custom-mediaplayer-commandline" type="s">
+      <default>""</default>
+      <summary>Custom mediaplayer command to play streams.</summary>
+      <description></description>
+    </key>
+  </schema>
+</schemalist>
