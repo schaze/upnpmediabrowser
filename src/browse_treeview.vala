@@ -271,7 +271,7 @@ namespace UPNPMediaBrowser.UI{
         public void load_media_server(UPNPDevice device){
             this.device=device;
             if (!stores.has_key(device)){
-                UPNPServiceTreeStore store = new UPNPServiceTreeStore(device,9,
+                UPNPServiceTreeStore store = new UPNPServiceTreeStore(device,3,
                         typeof(Gdk.Pixbuf), // Column.ICON
                         typeof(string),     // Column.NAME
                         typeof(UPNPContentItem));       // Column.DATA
