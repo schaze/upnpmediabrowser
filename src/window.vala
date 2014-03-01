@@ -32,6 +32,9 @@ namespace UPNPMediaBrowser.UI{
               critical (err.message);
               return;
             }
+            Gdk.Pixbuf app_icon=new Gdk.Pixbuf.from_resource("/schaze/upnpmediabrowser/icons/upnpmediabrowser.svg");
+            icon_name=null;
+            set_icon(app_icon);
 
             toolbar=new UPNPMediaBrowser.UI.MediaRendererToolbar(app,context);
 
