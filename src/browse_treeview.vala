@@ -191,7 +191,7 @@ namespace UPNPMediaBrowser.UI{
 
             set (loading_iter,
                     Column.ICON,        placeholder_icon,
-                    Column.NAME,        "...loading...",
+                    Column.NAME,        _("...loading..."),
                     Column.DATA,        placeholder_item);
 
         }
@@ -291,7 +291,7 @@ namespace UPNPMediaBrowser.UI{
 
                 store.set (loading_iter,
                         Column.ICON,        placeholder_icon,
-                        Column.NAME,        "...loading...",
+                        Column.NAME,        _("...loading..."),
                         Column.DATA,        placeholder_item);
 
                 store.load_items(null);
