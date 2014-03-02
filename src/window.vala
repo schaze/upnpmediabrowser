@@ -7,8 +7,11 @@ namespace UPNPMediaBrowser.UI{
     [GtkTemplate (ui = "/schaze/upnpmediabrowser/ui/window.ui")]
     public class Window: Gtk.ApplicationWindow{
         public static Window instance;
+
+#if !USE_HEADERBAR
         [GtkChild]
         private Gtk.Box toolbar_container;
+#endif 
 
         [GtkChild]
         private Gtk.ScrolledWindow devices_treeview_container;
@@ -32,9 +35,14 @@ namespace UPNPMediaBrowser.UI{
               critical (err.message);
               return;
             }
-            Gdk.Pixbuf app_icon=new Gdk.Pixbuf.from_resource("/schaze/upnpmediabrowser/icons/upnpmediabrowser.svg");
-            icon_name=null;
-            set_icon(app_icon);
+            try {
+                Gdk.Pixbuf app_icon=new Gdk.Pixbuf.from_resource("/schaze/upnpmediabrowser/icons/upnpmediabrowser.svg");
+                icon_name=null;
+                set_icon(app_icon);
+            }catch (Error e){
+                warning("Cannot load application icon from ressources!\n%s",e.message);
+            
+            }
 
             toolbar=new UPNPMediaBrowser.UI.MediaRendererToolbar(app,context);
 

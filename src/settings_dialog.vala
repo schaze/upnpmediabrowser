@@ -21,8 +21,6 @@ namespace UPNPMediaBrowser.UI{
         private Gtk.CheckButton use_custom_player;
         [GtkChild]
         private Gtk.Entry custom_player_command;
-        [GtkChild]
-        private Gtk.Button save_button;
 
         private string mediaplayer_name;
         private string mediaplayer_commandline;

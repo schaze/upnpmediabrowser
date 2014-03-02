@@ -56,11 +56,11 @@ namespace UPNPMediaBrowser.UI{
         private UPNPDevice device;
 
         construct{
-            container_icon=get_icon(Gtk.Stock.DIRECTORY);
+            container_icon=get_icon("folder");
             audio_icon=get_icon("audio-x-generic");
             image_icon=get_icon("image-x-generic");
             video_icon=get_icon("video-x-generic");
-            placeholder_icon=get_icon(Gtk.Stock.REFRESH);
+            placeholder_icon=get_icon("view-refresh");
         }
 
 
@@ -243,7 +243,7 @@ namespace UPNPMediaBrowser.UI{
         private static Gdk.Pixbuf placeholder_icon;
 
         construct{
-            placeholder_icon=get_icon(Gtk.Stock.REFRESH);
+            placeholder_icon=get_icon("view-refresh");
         }
 
         public BrowseTreeView(UPNPMediaBrowser.Application app, Context ctxt){
@@ -313,6 +313,7 @@ namespace UPNPMediaBrowser.UI{
                 stores[device].get(iter,Column.DATA, out item);
                 print("Item selected: %s\n",item.didl.title);
                 GLib.List<GUPnP.DIDLLiteResource> resources=item.didl.get_resources();
+                try{
                 if (resources.length()>0){
                     GLib.Settings settings=new GLib.Settings ("org.schaze.upnpmediabrowser.general");
                     AppInfo player;
@@ -327,6 +328,10 @@ namespace UPNPMediaBrowser.UI{
                     GLib.List<string> uris=new GLib.List<string>();
                     uris.append(resources.first().data.uri);
                     player.launch_uris(uris,null);
+                }
+                }catch(Error e){
+                    warning("Cannot start player.\n%s",e.message);
+                
                 }
             }
         }

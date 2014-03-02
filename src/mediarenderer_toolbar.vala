@@ -27,7 +27,7 @@ namespace UPNPMediaBrowser.UI{
 
         UPNPMediaBrowser.Application app;
 
-        Gdk.Pixbuf local_renderer_icon=get_icon(Gtk.STOCK_HOME,24);
+        Gdk.Pixbuf local_renderer_icon=get_icon("go-home",24);
 
         public signal void rescanRequest ();
 
@@ -200,14 +200,18 @@ namespace UPNPMediaBrowser.UI{
         private void on_volume_changed(GUPnP.LastChangeParser lc_parser, Value val){
             print ("on_volume_changed\n");
             int tmp_volume=-1;
-            if(lc_parser.parse_last_change(0,val as string,"Volume",typeof(int),out tmp_volume) && tmp_volume != -1) {
-                volume=tmp_volume;
-                print ("setting volume button value to %i\n",tmp_volume);
-                print ("volume button %f\n",volume_button.value);
-                volume_button.value=tmp_volume;
-                print ("setting volume button value DONE\n");
+            try {
+                if(lc_parser.parse_last_change(0,val as string,"Volume",typeof(int),out tmp_volume) && tmp_volume != -1) {
+                    volume=tmp_volume;
+                    print ("setting volume button value to %i\n",tmp_volume);
+                    print ("volume button %f\n",volume_button.value);
+                    volume_button.value=tmp_volume;
+                    print ("setting volume button value DONE\n");
+                }
+                print ("Volume: %i\n",tmp_volume);
+            } catch (Error err) {
+                warning ("error parsing didl results: %s", err.message);
             }
-            print ("Volume: %i\n",tmp_volume);
         }
 
         private void on_mute_changed(GUPnP.LastChangeParser lc_parser, Value val){
@@ -215,15 +219,19 @@ namespace UPNPMediaBrowser.UI{
             bool muted=volume<0;
             bool changed=false;
             bool muted_false=false;
-            if(lc_parser.parse_last_change(0,val as string,"Mute",typeof(bool),out muted_false) && muted_false){
-                muted=true;
-                changed=true;
-            }
+            try{
+                if(lc_parser.parse_last_change(0,val as string,"Mute",typeof(bool),out muted_false) && muted_false){
+                    muted=true;
+                    changed=true;
+                }
 
-            bool muted_true=true;
-            if(lc_parser.parse_last_change(0,val as string,"Mute",typeof(bool),out muted_true) && !muted_true){
-                muted=false;
-                changed=true;
+                bool muted_true=true;
+                if(lc_parser.parse_last_change(0,val as string,"Mute",typeof(bool),out muted_true) && !muted_true){
+                    muted=false;
+                    changed=true;
+                }
+            } catch (Error err) {
+                warning ("error parsing didl results: %s", err.message);
             }
 
             if (changed)
@@ -235,27 +243,35 @@ namespace UPNPMediaBrowser.UI{
 
         private void on_track_duration_changed(GUPnP.LastChangeParser lc_parser, Value val){
             string current_track_duration=null;
-            if(lc_parser.parse_last_change(0,val as string,"CurrentTrackDuration",typeof(string),out current_track_duration) && current_track_duration != null) {
-                print ("CurrentTrackDuration: %s\n",current_track_duration);
-                position_info.set_range(0,duration_stamp_to_seconds(current_track_duration));
-                duration_label.label=current_track_duration;
+            try{
+                if(lc_parser.parse_last_change(0,val as string,"CurrentTrackDuration",typeof(string),out current_track_duration) && current_track_duration != null) {
+                    print ("CurrentTrackDuration: %s\n",current_track_duration);
+                    position_info.set_range(0,duration_stamp_to_seconds(current_track_duration));
+                    duration_label.label=current_track_duration;
+                }
+            } catch (Error err) {
+                warning ("error parsing didl results: %s", err.message);
             }
         }
 
         private void on_transport_state_changed(GUPnP.LastChangeParser lc_parser, Value val){
             string transport_state=null;
-            if(lc_parser.parse_last_change(0,val as string,"TransportState",typeof(string),out transport_state) && transport_state != null){
-                switch (transport_state){
-                    case TRANSPORT_STATE_STOPPED:
-                    case TRANSPORT_STATE_PAUSED_PLAYBACK:
-                        play_pause_button.image=icon_play;
-                        break;
-                    case TRANSPORT_STATE_PLAYING:
-                        play_pause_button.image=icon_pause;
-                        break;
-                }
-                print ("TransportState: %s\n",transport_state);
+            try{
+                if(lc_parser.parse_last_change(0,val as string,"TransportState",typeof(string),out transport_state) && transport_state != null){
+                    switch (transport_state){
+                        case TRANSPORT_STATE_STOPPED:
+                        case TRANSPORT_STATE_PAUSED_PLAYBACK:
+                            play_pause_button.image=icon_play;
+                            break;
+                        case TRANSPORT_STATE_PLAYING:
+                            play_pause_button.image=icon_pause;
+                            break;
+                    }
+                    print ("TransportState: %s\n",transport_state);
 
+                }
+            } catch (Error err) {
+                warning ("error parsing didl results: %s", err.message);
             }
 
         }
@@ -271,16 +287,20 @@ namespace UPNPMediaBrowser.UI{
         private void on_transport_actions_changed(GUPnP.LastChangeParser lc_parser, Value val){
             // Play, Stop, Pause, Seek, Next, Previous
             string current_transport_actions=null;
-            if(lc_parser.parse_last_change(0,val as string,"CurrentTransportActions",typeof(string),out current_transport_actions) && current_transport_actions != null) {
-                string[] actions=current_transport_actions.split(",");
-                play_pause_button.sensitive = contains_action(actions,TRANSPORT_ACTION_PLAY);
-                play_pause_button.sensitive = contains_action(actions,TRANSPORT_ACTION_PAUSE);
-                previous_button.sensitive = contains_action(actions,TRANSPORT_ACTION_PREVIOUS);
-                next_button.sensitive = contains_action(actions,TRANSPORT_ACTION_NEXT);
-                stop_button.sensitive = contains_action(actions,TRANSPORT_ACTION_STOP);
+            try{
+                if(lc_parser.parse_last_change(0,val as string,"CurrentTransportActions",typeof(string),out current_transport_actions) && current_transport_actions != null) {
+                    string[] actions=current_transport_actions.split(",");
+                    play_pause_button.sensitive = contains_action(actions,TRANSPORT_ACTION_PLAY);
+                    play_pause_button.sensitive = contains_action(actions,TRANSPORT_ACTION_PAUSE);
+                    previous_button.sensitive = contains_action(actions,TRANSPORT_ACTION_PREVIOUS);
+                    next_button.sensitive = contains_action(actions,TRANSPORT_ACTION_NEXT);
+                    stop_button.sensitive = contains_action(actions,TRANSPORT_ACTION_STOP);
 
-                position_info.sensitive= contains_action(actions, TRANSPORT_ACTION_SEEK);
-                print ("CurrentTransportActions: %s\n",current_transport_actions);
+                    position_info.sensitive= contains_action(actions, TRANSPORT_ACTION_SEEK);
+                    print ("CurrentTransportActions: %s\n",current_transport_actions);
+                }
+            } catch (Error err) {
+                warning ("error parsing didl results: %s", err.message);
             }
 
         }
@@ -291,18 +311,22 @@ namespace UPNPMediaBrowser.UI{
 
         private void on_track_metadata_changed(GUPnP.LastChangeParser lc_parser, Value val){
             string current_track_metadata=null;
-            if(lc_parser.parse_last_change(0,val as string,"CurrentTrackMetaData",typeof(string),out current_track_metadata) && current_track_metadata != null){
+            try{
+                if(lc_parser.parse_last_change(0,val as string,"CurrentTrackMetaData",typeof(string),out current_track_metadata) && current_track_metadata != null){
 
-                GUPnP.DIDLLiteParser parser = new GUPnP.DIDLLiteParser ();
-                parser.item_available.connect (on_item_available);
-                try {
-                    parser.parse_didl (current_track_metadata);
-                } catch (Error err) {
-                    warning ("error parsing track_metadata: %s", err.message);
-                    title.label="<b></b>\n<i></i>";
+                    GUPnP.DIDLLiteParser parser = new GUPnP.DIDLLiteParser ();
+                    parser.item_available.connect (on_item_available);
+                    try {
+                        parser.parse_didl (current_track_metadata);
+                    } catch (Error err) {
+                        warning ("error parsing track_metadata: %s", err.message);
+                        title.label="<b></b>\n<i></i>";
+                    }
+
+                    print ("CurrentTrackMetaData: %s\n",current_track_metadata);
                 }
-
-                print ("CurrentTrackMetaData: %s\n",current_track_metadata);
+            } catch (Error err) {
+                warning ("error parsing didl results: %s", err.message);
             }
 
         }
@@ -369,6 +393,7 @@ namespace UPNPMediaBrowser.UI{
         private void position_update(GUPnP.ServiceProxy proxy, GUPnP.ServiceProxyAction action){
             string track_duration=null;
             string abs_time=null;
+            try{
             if (proxy.end_action(action,
                       "TrackDuration", typeof(string), out track_duration,
                       "AbsTime", typeof(string),out abs_time )){
@@ -376,6 +401,9 @@ namespace UPNPMediaBrowser.UI{
                 position_info.set_value(duration_stamp_to_seconds(abs_time));
                 duration_label.label=track_duration;
                 abs_time_label.label=abs_time;
+            }
+            }catch(Error e){
+                warning("Error receiving position update information!\n%s",e.message); 
             }
         }
     }
