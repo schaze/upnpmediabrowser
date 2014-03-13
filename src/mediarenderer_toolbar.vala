@@ -70,6 +70,7 @@ namespace UPNPMediaBrowser.UI{
         private ControlPoint cp;
         private Gtk.ListStore store;
         private UPNPDevice active_device=null;
+        private string current_transport_state=TRANSPORT_STATE_STOPPED;
 
         private GLib.TimeoutSource update_timer=null;
 
@@ -181,11 +182,52 @@ namespace UPNPMediaBrowser.UI{
             subscribe_to_mediarenderer(device);
         }
 
+        [GtkCallback]
+        private void play_pause_button_clicked_cb () {
+            if (active_device == null)
+                return;
+            if (current_transport_state==TRANSPORT_STATE_PLAYING){
+                active_device.AVTransport.begin_action(
+                    "Pause",
+                    (proxy,action)=>{
+                        string result="";
+                        proxy.end_action(action, null
+                        );
+                    },
+                    "InstanceID", typeof (string), "0"
+                );
+            }else{
+                active_device.AVTransport.begin_action(
+                    "Play",
+                    (proxy,action)=>{
+                        string result="";
+                        proxy.end_action(action, null
+                        );
+                    },
+                    "InstanceID", typeof (string), "0",
+                    "Speed", typeof (string), "1"
+                );
+            }
+        }
+
+        [GtkCallback]
+        private void stop_button_clicked_cb() {
+            if (active_device == null)
+                return;
+            active_device.AVTransport.begin_action(
+                "Stop",
+                (proxy,action)=>{
+                    string result="";
+                    proxy.end_action(action, null
+                    );
+                },
+                "InstanceID", typeof (string), "0"
+            );
+        }
         public void on_mediarenderer_notify(ServiceProxy proxy, string variable, Value val){
             print("[%s]=%s\n",variable, (string)val);
             if(variable=="LastChange"){
                 GUPnP.LastChangeParser lc_parser=new GUPnP.LastChangeParser();
-
 
                 on_mute_changed(lc_parser,val);
                 on_volume_changed(lc_parser, val);
@@ -258,6 +300,9 @@ namespace UPNPMediaBrowser.UI{
             string transport_state=null;
             try{
                 if(lc_parser.parse_last_change(0,val as string,"TransportState",typeof(string),out transport_state) && transport_state != null){
+
+                    current_transport_state=transport_state;
+
                     switch (transport_state){
                         case TRANSPORT_STATE_STOPPED:
                         case TRANSPORT_STATE_PAUSED_PLAYBACK:
